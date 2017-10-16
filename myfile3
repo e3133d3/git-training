@@ -1,0 +1,31 @@
+myfile3: "nConn": {
+            "kind": "ap:query:compose:map",
+            "query": {
+              "kind": "ap:query:stats:byEntities",
+              "source": "bigip",
+              "module": "tcp",
+              "sortOrder": "desc",
+              "dimension": "application",
+              "timeRange": {
+                "from": "${$from}",
+                "to": "now"
+              },
+              "sortMetric": "avg_nConn",
+              "dimensionFilter": {
+                "type": "eq",
+                "dimension": "application",
+                "value": "${_.id}"
+              },
+              "aggregations": {
+                "avg_nConn": {
+                  "metric": "avg-count-per-sec",
+                  "metricSet": "connections-starts"
+                }
+              }
+            },
+            "mapFunction": {
+              "kind": "jsonPath",
+              "path": "$.result[0].avg_nConn",
+              "defaultValue": "NA"
+            }
+          }
